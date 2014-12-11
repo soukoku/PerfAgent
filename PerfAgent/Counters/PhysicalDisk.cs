@@ -7,6 +7,9 @@ using System.Text;
 
 namespace PerfAgent.Counters
 {
+    /// <summary>
+    /// Contains common performance counters from the PhysicalDisk category.
+    /// </summary>
     public class PhysicalDisk : Disposable
     {
         string _machine;
@@ -15,6 +18,10 @@ namespace PerfAgent.Counters
         PerformanceCounter[] _bytesPerSecCounters;
         PerformanceCounter[] _avgQueueCounters;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PhysicalDisk"/> class.
+        /// </summary>
+        /// <param name="machineName">Name of the machine.</param>
         public PhysicalDisk(string machineName)
         {
             _machine = machineName;
@@ -25,6 +32,10 @@ namespace PerfAgent.Counters
             _avgQueueCounters = new PerformanceCounter[_fullInstanceNames.Count];
         }
 
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -35,8 +46,19 @@ namespace PerfAgent.Counters
             base.Dispose(disposing);
         }
 
+        /// <summary>
+        /// Gets the names of the disks.
+        /// </summary>
+        /// <value>
+        /// The names.
+        /// </value>
         public IList<string> Names { get { return _dispInstanceNames; } }
 
+        /// <summary>
+        /// Gets the bytes per sec for a disk.
+        /// </summary>
+        /// <param name="diskNumber">The disk number.</param>
+        /// <returns></returns>
         public double GetBytesPerSec(int diskNumber)
         {
             return GetBytesCounter(diskNumber).NextValue();
@@ -53,6 +75,11 @@ namespace PerfAgent.Counters
             return pc;
         }
 
+        /// <summary>
+        /// Gets the average length of the queue for a disk.
+        /// </summary>
+        /// <param name="diskNumber">The disk number.</param>
+        /// <returns></returns>
         public float GetAvgQueueLength(int diskNumber)
         {
             return GetQueueCounter(diskNumber).NextValue();

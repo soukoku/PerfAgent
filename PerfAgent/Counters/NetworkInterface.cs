@@ -7,6 +7,9 @@ using System.Text;
 
 namespace PerfAgent.Counters
 {
+    /// <summary>
+    /// Contains common performance counters from the NetworkInterface category.
+    /// </summary>
     public class NetworkInterface : Disposable
     {
         string _machine;
@@ -15,6 +18,10 @@ namespace PerfAgent.Counters
         PerformanceCounter[] _sentCounters;
         PerformanceCounter[] _outQueueCounters;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetworkInterface"/> class.
+        /// </summary>
+        /// <param name="machineName">Name of the machine.</param>
         public NetworkInterface(string machineName)
         {
             _machine = machineName;
@@ -25,6 +32,10 @@ namespace PerfAgent.Counters
             _outQueueCounters = new PerformanceCounter[_instanceNames.Count];
         }
 
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -36,8 +47,19 @@ namespace PerfAgent.Counters
             base.Dispose(disposing);
         }
 
+        /// <summary>
+        /// Gets the interface names.
+        /// </summary>
+        /// <value>
+        /// The names.
+        /// </value>
         public IList<string> Names { get { return _instanceNames; } }
 
+        /// <summary>
+        /// Gets the bytes received per sec for an interface.
+        /// </summary>
+        /// <param name="networkNumber">The network number.</param>
+        /// <returns></returns>
         public double GetBytesReceivedPerSec(int networkNumber)
         {
             return GetReceiveCounter(networkNumber).NextValue();
@@ -54,6 +76,11 @@ namespace PerfAgent.Counters
             return pc;
         }
 
+        /// <summary>
+        /// Gets the bytes sent per sec for an interface.
+        /// </summary>
+        /// <param name="networkNumber">The network number.</param>
+        /// <returns></returns>
         public double GetBytesSentPerSec(int networkNumber)
         {
             return GetSentCounter(networkNumber).NextValue();
@@ -70,6 +97,11 @@ namespace PerfAgent.Counters
             return pc;
         }
 
+        /// <summary>
+        /// Gets the length of the output queue for an interface.
+        /// </summary>
+        /// <param name="networkNumber">The network number.</param>
+        /// <returns></returns>
         public float GetOutputQueueLength(int networkNumber)
         {
             return GetOutQueueCounter(networkNumber).NextValue();
