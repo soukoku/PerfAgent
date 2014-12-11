@@ -20,9 +20,11 @@ namespace PerfAgent.Counters
 
         protected override void Dispose(bool disposing)
         {
-            if (_availableKB != null) { _availableKB.Dispose(); }
-            if (_pagesPerSec != null) { _pagesPerSec.Dispose(); }
-
+            if (disposing)
+            {
+                if (_availableKB != null) { _availableKB.Dispose(); }
+                if (_pagesPerSec != null) { _pagesPerSec.Dispose(); }
+            }
             base.Dispose(disposing);
         }
 

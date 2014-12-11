@@ -9,21 +9,22 @@ namespace PerfAgent.Counters
     public class Processor : Disposable
     {
         string _machine;
-        string[] _instanceNames;
+        IList<string> _instanceNames;
         PerformanceCounter[] _processorTimeCounters;
 
         public Processor(string machineName)
         {
             _machine = machineName;
-            _instanceNames = new PerformanceCounterCategory("Processor", machineName).GetInstanceNames();
-            _processorTimeCounters = new PerformanceCounter[_instanceNames.Length];
+            _instanceNames = new PerformanceCounterCategory("Processor", machineName).GetInstanceNames()
+                .OrderBy(n => n).ToArray();
+            _processorTimeCounters = new PerformanceCounter[_instanceNames.Count];
         }
 
         protected override void Dispose(bool disposing)
         {
-            foreach (var pc in _processorTimeCounters)
+            if (disposing)
             {
-                if (pc != null) { pc.Dispose(); }
+                _processorTimeCounters.DisposeList();
             }
             base.Dispose(disposing);
         }

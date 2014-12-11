@@ -1,4 +1,5 @@
-﻿using PerfAgent;
+﻿using Humanizer;
+using PerfAgent;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,12 +33,17 @@ namespace Runner
             
             Console.WriteLine("Memory: {0:N2} % free @ {1:N2} pages/s", 100 * (a.Memory.AvailableBytes / a.Memory.TotalBytes), a.Memory.PagesPerSec);
 
-            Console.WriteLine("Network");
+            Console.WriteLine("Network:");
             for (int i = 0; i < a.NetworkInterface.Names.Count; i++)
             {
-                Console.WriteLine("\t{0}: Recv {1} B/s\tSent {2} B/s", a.NetworkInterface.Names[i], a.NetworkInterface.GetBytesReceivedPerSec(i), a.NetworkInterface.GetBytesSentPerSec(i));
+                Console.WriteLine("\t{0}:\tRecv {1}/s\tSent {2}/s", a.NetworkInterface.Names[i], a.NetworkInterface.GetBytesReceivedPerSec(i).Bytes().Humanize("0.#"), a.NetworkInterface.GetBytesSentPerSec(i).Bytes().Humanize("0.#"));
             }
 
+            Console.WriteLine("Disk:");
+            for (int i = 0; i < a.PhysicalDisk.Names.Count; i++)
+            {
+                Console.WriteLine("\t{0}\t{1}/s\tAvg queue: {2:N2}", a.PhysicalDisk.Names[i], a.PhysicalDisk.GetBytesPerSec(i).Bytes().Humanize("0.#"), a.PhysicalDisk.GetAvgQueueLength(i));
+            }
         }
     }
 }

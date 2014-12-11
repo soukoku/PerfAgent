@@ -26,10 +26,13 @@ namespace PerfAgent
 
         protected override void Dispose(bool disposing)
         {
-            _timer.Dispose();
-            if (_processor != null) { _processor.Dispose(); }
-            if (_memory != null) { _memory.Dispose(); }
-            if (_networkInterface != null) { _networkInterface.Dispose(); }
+            if (disposing)
+            {
+                _timer.Dispose();
+                if (_processor != null) { _processor.Dispose(); }
+                if (_memory != null) { _memory.Dispose(); }
+                if (_networkInterface != null) { _networkInterface.Dispose(); }
+            }
             base.Dispose(disposing);
         }
 
@@ -65,6 +68,12 @@ namespace PerfAgent
         public NetworkInterface NetworkInterface
         {
             get { return _networkInterface ?? (_networkInterface = new NetworkInterface(MachineName)); }
+        }
+
+        private PhysicalDisk _physicalDisk;
+        public PhysicalDisk PhysicalDisk
+        {
+            get { return _physicalDisk ?? (_physicalDisk = new Counters.PhysicalDisk(MachineName)); }
         }
 
 

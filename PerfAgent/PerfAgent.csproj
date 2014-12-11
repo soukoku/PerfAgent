@@ -56,11 +56,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agent.cs" />
+    <Compile Include="Counters\PhysicalDisk.cs" />
     <Compile Include="Counters\NetworkInterface.cs" />
     <Compile Include="Counters\Memory.cs" />
     <Compile Include="Disposable.cs" />
     <Compile Include="Counters\Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
