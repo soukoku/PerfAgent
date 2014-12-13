@@ -25,13 +25,18 @@ namespace Runner
 
             var a = (Agent)sender;
 
-            Console.WriteLine("Cpu: total {0:N2} % with {1} processors", a.Processor.TotalProcessorTime, a.Processor.Processors);
+            Console.WriteLine("Cpu:");
+            Console.WriteLine("\tprocess: {0:N2} %", a.Processor.CurrentProcessTime);
+            Console.WriteLine("\ttotal {0:N2} % with {1} processors", a.Processor.TotalProcessorTime, a.Processor.Processors);
             for (int i = 0; i < a.Processor.Processors; i++)
             {
                 Console.WriteLine("\tcpu{0}: {1:N2} %", i, a.Processor.GetProcessorTime(i));
             }
-            
-            Console.WriteLine("Memory: {0:N2} % free @ {1:N2} pages/s", 100 * (a.Memory.AvailableBytes / a.Memory.TotalBytes), a.Memory.PagesPerSec);
+
+            Console.WriteLine("Memory:");
+            Console.WriteLine("\tprocess used: {0}", a.Memory.CurrentProcessBytes.Bytes().Humanize("0.#"));
+            Console.WriteLine("\ttotal used: {0}", (a.Memory.TotalBytes - a.Memory.AvailableBytes).Bytes().Humanize("0.#"));
+            Console.WriteLine("\t{0:N2} % free @ {1:N2} pages/s", 100 * (a.Memory.AvailableBytes / a.Memory.TotalBytes), a.Memory.PagesPerSec);
 
             Console.WriteLine("Network:");
             for (int i = 0; i < a.NetworkInterface.Names.Count; i++)

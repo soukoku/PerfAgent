@@ -13,6 +13,7 @@ namespace PerfAgent.Counters
     {
         PerformanceCounter _availableKB;
         PerformanceCounter _pagesPerSec;
+        PerformanceCounter _curProcCounter;
         string _machine;
 
         /// <summary>
@@ -35,6 +36,7 @@ namespace PerfAgent.Counters
             {
                 if (_availableKB != null) { _availableKB.Dispose(); }
                 if (_pagesPerSec != null) { _pagesPerSec.Dispose(); }
+                if (_curProcCounter != null) { _curProcCounter.Dispose(); }
             }
             base.Dispose(disposing);
         }
@@ -53,13 +55,35 @@ namespace PerfAgent.Counters
         /// <value>
         /// The available bytes.
         /// </value>
-        public float AvailableBytes
+        public double AvailableBytes
         {
             get
             {
                 return (_availableKB ??
                     (_availableKB = new PerformanceCounter("Memory", "Available Bytes", string.Empty, _machine)))
                     .NextValue();
+            }
+        }
+
+
+        /// <summary>
+        /// Gets the private working set used by current process.
+        /// </summary>
+        /// <value>
+        /// The current process's private working set bytes.
+        /// </value>
+        public double CurrentProcessBytes
+        {
+            get
+            {
+                if (_curProcCounter == null)
+                {
+                    using (var proc = Process.GetCurrentProcess())
+                    {
+                        _curProcCounter = new PerformanceCounter("Process", "Working Set - Private", proc.ProcessName, _machine);
+                    }
+                }
+                return _curProcCounter.NextValue();
             }
         }
 

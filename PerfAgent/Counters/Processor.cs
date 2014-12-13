@@ -14,6 +14,7 @@ namespace PerfAgent.Counters
         string _machine;
         IList<string> _instanceNames;
         PerformanceCounter[] _processorTimeCounters;
+        PerformanceCounter _curProcCounter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Processor"/> class.
@@ -35,6 +36,7 @@ namespace PerfAgent.Counters
         {
             if (disposing)
             {
+                if (_curProcCounter != null) { _curProcCounter.Dispose(); }
                 _processorTimeCounters.DisposeList();
             }
             base.Dispose(disposing);
@@ -59,6 +61,27 @@ namespace PerfAgent.Counters
             get
             {
                 return GetTimeCounter(0).NextValue();
+            }
+        }
+
+        /// <summary>
+        /// Gets the current process's cpu utilization.
+        /// </summary>
+        /// <value>
+        /// The current process's cpu time.
+        /// </value>
+        public float CurrentProcessTime
+        {
+            get
+            {
+                if (_curProcCounter == null)
+                {
+                    using (var proc = Process.GetCurrentProcess())
+                    {
+                        _curProcCounter = new PerformanceCounter("Process", "% Processor Time", proc.ProcessName, _machine);
+                    }
+                }
+                return _curProcCounter.NextValue();
             }
         }
 

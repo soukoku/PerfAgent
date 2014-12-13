@@ -1,6 +1,7 @@
 ﻿using PerfAgent.Counters;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Timers;
@@ -13,6 +14,7 @@ namespace PerfAgent
     public class Agent : Disposable
     {
         Timer _timer;
+        Stopwatch _watch;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Agent"/> class.
@@ -30,6 +32,7 @@ namespace PerfAgent
             _timer = new Timer();
             _timer.Elapsed += _timer_Elapsed;
             _timer.Interval = 1000;
+            _watch = new Stopwatch();
             MachineName = machineName;
         }
 
@@ -41,6 +44,7 @@ namespace PerfAgent
         {
             if (disposing)
             {
+                _watch.Stop();
                 _timer.Dispose();
                 if (_processor != null) { _processor.Dispose(); }
                 if (_memory != null) { _memory.Dispose(); }
@@ -121,16 +125,24 @@ namespace PerfAgent
 
 
         /// <summary>
-        /// Gets or sets the timer interval.
+        /// Gets or sets the <see cref="Elapsed"/> event interval.
         /// </summary>
         /// <value>
         /// The timer interval.
         /// </value>
-        public TimeSpan Interval
+        public TimeSpan ElapsedInterval
         {
             get { return TimeSpan.FromMilliseconds(_timer.Interval); }
             set { _timer.Interval = value.TotalMilliseconds; }
         }
+
+        /// <summary>
+        /// Gets the time elapsed since <see cref="Start"/> has been called.
+        /// </summary>
+        /// <value>
+        /// The time since start.
+        /// </value>
+        public TimeSpan TimeSinceStart { get { return _watch.Elapsed; } }
 
         /// <summary>
         /// Gets a value indicating whether this instance is running.
@@ -145,6 +157,7 @@ namespace PerfAgent
         /// </summary>
         public void Start()
         {
+            _watch.Restart();
             _timer.Enabled = IsRunning = true;
         }
         /// <summary>
@@ -152,11 +165,12 @@ namespace PerfAgent
         /// </summary>
         public void Stop()
         {
+            _watch.Stop();
             _timer.Enabled = IsRunning = false;
         }
 
         /// <summary>
-        /// Occurs when the specified <see cref="Interval"/> has elapsed.
+        /// Occurs when the specified <see cref="ElapsedInterval"/> has elapsed.
         /// </summary>
         public event EventHandler Elapsed;
     }
