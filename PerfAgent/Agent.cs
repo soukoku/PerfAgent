@@ -68,12 +68,25 @@ namespace PerfAgent
         }
 
         /// <summary>
-        /// Gets the name of the machine.
+        /// Gets the machine name used to create the agent.
         /// </summary>
         /// <value>
         /// The name of the machine.
         /// </value>
         public string MachineName { get; private set; }
+
+        private DeviceInfo _deviceInfo;
+        /// <summary>
+        /// Gets the additional device information.
+        /// </summary>
+        /// <value>
+        /// The device information.
+        /// </value>
+        public DeviceInfo DeviceInfo
+        {
+            get { return _deviceInfo ?? (_deviceInfo = new DeviceInfo(MachineName)); }
+        }
+
 
         private Processor _processor;
         /// <summary>
@@ -157,7 +170,8 @@ namespace PerfAgent
         /// </summary>
         public void Start()
         {
-            _watch.Restart();
+            _watch.Reset();
+            _watch.Start();
             _timer.Enabled = IsRunning = true;
         }
         /// <summary>

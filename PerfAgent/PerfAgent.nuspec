@@ -16,6 +16,6 @@
     <!--<tags></tags>-->
   </metadata>
 	<files>
-		<file src="bin\$configuration$\$id$.pdb" target="lib\net40-client"/>
+		<file src="bin\$configuration$\$id$.pdb" target="lib\net35-client"/>
 	</files>
 </package>
