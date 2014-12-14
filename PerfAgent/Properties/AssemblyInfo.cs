@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("PerfAgent")]
-[assembly: AssemblyDescription("Wraps common performance counters for easy use.")]
+[assembly: AssemblyDescription("Wraps performance counters and WMI for easy monitoring of common system parameters.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Yin-Chun Wang")]
 [assembly: AssemblyProduct("PerfAgent")]
@@ -35,6 +35,6 @@ namespace PerfAgent
     {
         public const string Release = "1.0.0.0"; // keep this same in major (breaking) releases
 
-        public const string Build = "1.2.0.0"; // change this for each nuget release
+        public const string Build = "1.2.1.0"; // change this for each nuget release
     }
 }

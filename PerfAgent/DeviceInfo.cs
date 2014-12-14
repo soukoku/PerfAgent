@@ -32,19 +32,45 @@ namespace PerfAgent
                 scope = new ManagementScope(string.Format("\\\\{0}\\root\\cimv2", machineName));
                 scope.Connect();
             }
-            ObjectQuery query = new ObjectQuery("SELECT Manufacturer, Model, Name FROM Win32_ComputerSystem ");
-
+            ObjectQuery query = new ObjectQuery("SELECT Manufacturer, Model, Name FROM Win32_ComputerSystem");
             using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query))
             {
                 foreach (var m in searcher.Get())
                 {
-                    Name = m["Name"].ToString();
-                    Manufacturer = m["Manufacturer"].ToString();
-                    Model = m["Model"].ToString();
+                    DeviceName = m["Name"].ToString();
+                    DeviceManufacturer = m["Manufacturer"].ToString();
+                    DeviceModel = m["Model"].ToString();
+                    m.Dispose();
+                }
+            }
+            
+            query = new ObjectQuery("SELECT Caption, Version FROM Win32_OperatingSystem");
+            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query))
+            {
+                foreach (var m in searcher.Get())
+                {
+                    OSName = m["Caption"].ToString();
+                    OSVersion = m["Version"].ToString();
                     m.Dispose();
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the name of the os.
+        /// </summary>
+        /// <value>
+        /// The name of the os.
+        /// </value>
+        public string OSName { get; private set; }
+
+        /// <summary>
+        /// Gets the os version.
+        /// </summary>
+        /// <value>
+        /// The os version.
+        /// </value>
+        public string OSVersion { get; private set; }
 
         /// <summary>
         /// Gets the name of the device.
@@ -52,22 +78,22 @@ namespace PerfAgent
         /// <value>
         /// The device name.
         /// </value>
-        public string Name { get; private set; }
+        public string DeviceName { get; private set; }
 
         /// <summary>
-        /// Gets the manufacturer name.
+        /// Gets the device manufacturer name.
         /// </summary>
         /// <value>
-        /// The manufacturer.
+        /// The device manufacturer.
         /// </value>
-        public string Manufacturer { get; private set; }
+        public string DeviceManufacturer { get; private set; }
 
         /// <summary>
-        /// Gets the model info.
+        /// Gets the device model.
         /// </summary>
         /// <value>
-        /// The model.
+        /// The device model.
         /// </value>
-        public string Model { get; private set; }
+        public string DeviceModel { get; private set; }
     }
 }

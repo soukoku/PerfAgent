@@ -26,9 +26,10 @@ namespace Runner
             var a = (Agent)sender;
 
             Console.WriteLine("System:");
-            Console.WriteLine("\tName: {0}", a.DeviceInfo.Name);
-            Console.WriteLine("\tManufacturer: {0}", a.DeviceInfo.Manufacturer);
-            Console.WriteLine("\tModel: {0}", a.DeviceInfo.Model);
+            Console.WriteLine("\tOS: {0} {1}", a.DeviceInfo.OSName, a.DeviceInfo.OSVersion);
+            Console.WriteLine("\tName: {0}", a.DeviceInfo.DeviceName);
+            Console.WriteLine("\tManufacturer: {0}", a.DeviceInfo.DeviceManufacturer);
+            Console.WriteLine("\tModel: {0}", a.DeviceInfo.DeviceModel);
 
             Console.WriteLine("Cpu:");
             Console.WriteLine("\tprocess: {0:N2} %", a.Processor.CurrentProcessTime);
