@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Runner
 {
@@ -22,6 +23,8 @@ namespace Runner
         static void agent_Elapsed(object sender, EventArgs e)
         {
             Console.Clear();
+
+            Console.WriteLine("Thread: {0}", Thread.CurrentThread.ManagedThreadId);
 
             var a = (Agent)sender;
 
