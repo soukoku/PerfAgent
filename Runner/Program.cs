@@ -50,7 +50,11 @@ namespace Runner
             Console.WriteLine("Network:");
             for (int i = 0; i < a.NetworkInterface.Names.Count; i++)
             {
-                Console.WriteLine("\t{0}:\tRecv {1}/s\tSent {2}/s", a.NetworkInterface.Names[i], a.NetworkInterface.GetBytesReceivedPerSec(i).Bytes().Humanize("0.#"), a.NetworkInterface.GetBytesSentPerSec(i).Bytes().Humanize("0.#"));
+                Console.WriteLine("\t{0}:\tRecv {1}/s\tSent {2}/s\tBW {3}", 
+                    a.NetworkInterface.Names[i], 
+                    a.NetworkInterface.GetBytesReceivedPerSec(i).Bytes().Humanize("0.#"), 
+                    a.NetworkInterface.GetBytesSentPerSec(i).Bytes().Humanize("0.#"),
+                    a.NetworkInterface.GetBandwidth(i).Bytes().Humanize("0.#"));
             }
 
             Console.WriteLine("Disk:");

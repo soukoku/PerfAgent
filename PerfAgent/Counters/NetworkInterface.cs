@@ -17,6 +17,7 @@ namespace PerfAgent.Counters
         PerformanceCounter[] _receivedCounters;
         PerformanceCounter[] _sentCounters;
         PerformanceCounter[] _outQueueCounters;
+        PerformanceCounter[] _bandwidthCounters;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkInterface"/> class.
@@ -26,9 +27,10 @@ namespace PerfAgent.Counters
         {
             _machine = machineName;
             _instanceNames = new PerformanceCounterCategory("Network Interface", machineName).GetInstanceNames()
-                .Where(n => !n.StartsWith("isatap", StringComparison.OrdinalIgnoreCase)).ToArray();
+                .Where(n => !(n.StartsWith("isatap", StringComparison.OrdinalIgnoreCase) || n.Contains("Loopback") || n.Contains("Pseudo"))).ToArray();
             _receivedCounters = new PerformanceCounter[_instanceNames.Count];
             _sentCounters = new PerformanceCounter[_instanceNames.Count];
+            _bandwidthCounters = new PerformanceCounter[_instanceNames.Count];
             _outQueueCounters = new PerformanceCounter[_instanceNames.Count];
         }
 
@@ -93,6 +95,27 @@ namespace PerfAgent.Counters
             {
                 _sentCounters[instanceIdx] = pc =
                     new PerformanceCounter("Network Interface", "Bytes Sent/sec", _instanceNames[instanceIdx], _machine);
+            }
+            return pc;
+        }
+
+        /// <summary>
+        /// Gets the bandwidth in bytes for an interface.
+        /// </summary>
+        /// <param name="networkNumber">The network number.</param>
+        /// <returns></returns>
+        public double GetBandwidth(int networkNumber)
+        {
+            return GetGetBandwidthCounter(networkNumber).NextValue() / 8;
+        }
+
+        PerformanceCounter GetGetBandwidthCounter(int instanceIdx)
+        {
+            var pc = _bandwidthCounters[instanceIdx];
+            if (pc == null)
+            {
+                _bandwidthCounters[instanceIdx] = pc =
+                    new PerformanceCounter("Network Interface", "Current Bandwidth", _instanceNames[instanceIdx], _machine);
             }
             return pc;
         }

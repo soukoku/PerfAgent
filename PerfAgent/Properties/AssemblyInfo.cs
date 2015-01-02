@@ -35,6 +35,6 @@ namespace PerfAgent
     {
         public const string Release = "1.0.0.0"; // keep this same in major (breaking) releases
 
-        public const string Build = "1.2.1.0"; // change this for each nuget release
+        public const string Build = "1.2.2.0"; // change this for each nuget release
     }
 }
